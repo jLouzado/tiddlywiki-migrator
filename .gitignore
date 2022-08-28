@@ -3,3 +3,5 @@
 *.html
 
 node_modules
+tmp_wiki
+markdown_tiddlers
