@@ -18,8 +18,6 @@ fs.readdir(PATHNAME, (err, files) => {
         newFilename = newFilename
             // Remove accents/diacritics
             .normalize('NFD').replace(/[\u0300-\u036f]/g, "")
-            // Make lowercase
-            .toLowerCase()
             // Convert separators to low line
             .replace(/\s+/g, '_')
             // Remove any non-safe character
