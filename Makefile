@@ -19,6 +19,7 @@ MARKDOWN_DIR := markdown_tiddlers
 TIDDLYWIKI_JS := node_modules/tiddlywiki/tiddlywiki.js
 ADD_PLUGIN_JS := scripts/add-plugin.js
 SAFE_RENAME_JS := scripts/safe-rename.js
+REMOVE_UNDERSCORE_JS := scripts/remove-underscore.js
 ORIGINAL_TIDDLYWIKI := wiki.html
 
 # This will only return something after make export-html has been run.
@@ -73,7 +74,7 @@ $(TIDDLYWIKI_INFO) : $(TIDDLYWIKI_JS)
 	$(NODEJS) $(ADD_PLUGIN_JS) $(TIDDLYWIKI_INFO) tiddlywiki/markdown
 
 .PHONY: convert
-convert : $(MARKDOWN_DIR) $(MARKDOWN_TIDDLERS)
+convert : $(MARKDOWN_DIR) $(MARKDOWN_TIDDLERS) finish
 
 $(MARKDOWN_DIR) :
 	@echo "Creating folder '$(MARKDOWN_DIR)'..."
@@ -86,6 +87,10 @@ $(MARKDOWN_DIR)/%.md : $(TW_OUTPUT_DIR)/%.html
 	@echo "---" >> "$@"
 	@$(PANDOC) -f html-native_divs-native_spans -t commonmark \
         --wrap=preserve -o - "$^" >> "$@"
+
+finish:
+	@echo "Replacing _'s with spaces"
+	$(NODEJS) $(REMOVE_UNDERSCORE_JS) $(MARKDOWN_DIR)
 
 .PHONY: clean
 clean :
